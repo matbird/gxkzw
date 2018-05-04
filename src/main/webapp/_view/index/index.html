@@ -1,0 +1,47 @@
+#@layout()
+#define main()
+<div class="flex-box kz-index-panel">
+	<div class="kz-index-img">
+		<img src="/assets/img/p4.png">
+	</div>
+	<div class="flex-box kz-index-info">
+		<div class="flex-box">
+			<span class="kz-info-topic">机电要闻</span><a class="kz-info-more" href="">更多>></a>
+		</div>
+		<div style="background-image: linear-gradient(45deg,#042a68,#EE2C2C);height: 2px;margin-top: 5px;"></div>
+		<ul class="kz-info-list">
+			#for(item : newsList)
+				<li class="flex-box">
+					<span class="triangle"></span><a href="">#(item.title)</a><span>[#(item.date)]</span>
+				</li>
+			#end
+		</ul>
+
+		<div class="flex-box" style="margin-top: 10px;">
+			<span class="kz-info-topic">通知公告</span><a class="kz-info-more" href="">更多>></a>
+		</div>
+		<div style="background-image: linear-gradient(45deg,#042a68,#EE2C2C);height: 2px;margin-top: 5px;"></div>
+		<ul class="kz-info-list">
+			#for(item : newsList)
+				<li class="flex-box">
+					<span class="triangle"></span><a href="">#(item.title)</a><span>[#(item.date)]</span>
+				</li>
+			#end
+		</ul>
+	</div>
+	<div class="flex-box kz-index-sidebar">
+		<img src="/assets/img/ad3.jpg">
+		<img src="/assets/img/top.png">
+		
+		<div class="kz-slidebar-menu">
+			<ul>
+				<li><span class="triangle"></span><a href="">协同办公平台</a></li>
+				<li><span class="triangle"></span><a href="">教务管理平台</a></li>
+				<li><span class="triangle"></span><a href="">网络课程平台</a></li>
+				<li><span class="triangle"></span><a href="">精品课程</a></li>
+				<li><span class="triangle"></span><a href="">校外VPN入口</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+#end

@@ -1,0 +1,69 @@
+#define layout()
+<!DOCTYPE html>
+<html lang="zh-CN" xml:lang="zh-CN">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<meta name="keywords" content="#(seoKeywords ?? '广西考证网')" />
+	<meta name="description" content="#(seoDescr ?? '广西考证网')" />
+	<title>#(seoTitle ?? "广西考证网")</title>
+
+	<link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="/assets/css/gxkzw-com-v1.0.css">
+</head>
+<body>
+	<!-- 头部容器 -->
+	<div class="kz-header-box">
+		<div class="kz-header-main">
+			<div style="padding-top: 5px">
+				<marquee><span style="padding-top: 5px;color: red;font-size: 15px;">国家示范性重点培育高职院校 国家示范性骨干高职院校</span></marquee>
+			</div>
+			
+			<div>
+				<img src="/assets/img/logo.png" style="float: left;" />
+				<img src="/assets/img/mot.png" style="margin:18px 0 0 50px;float: left;" />
+			</div>
+
+			<div class="kz-nav-box">
+				<ul class="kz-nav-menu-box">
+					<li><a href="">学院概况</a></li>
+					<li><a href="">系部介绍</a></li>
+					<li><a href="">机构设置</a></li>
+					<li><a href="">招生信息</a></li>
+					<li><a href="">就业创业</a></li>
+					<li><a href="">科学教研</a></li>
+					<li><a href="">学生服务</a></li>
+					<li><a href="">图书馆</a></li>
+					<li><a href="">合作交流</a></li>
+					<li><a href="">信息服务</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- 中间部分容器 -->
+	<div class="kz-body-box">
+		#@main()
+	</div>
+
+	<!-- 底部容器 -->
+	<div class="kz-footer-box">
+		<div class="kz-footer-contact">
+			<div>
+				广西机电职业技术学院版权所有 | 地址：广西南宁大学东路101号 | 邮编：530007 | 桂ICP备05000952号
+			</div>
+			<div>
+				电话：+86-771-3249900（院办） 3243821 3278454（招生就业办）
+			</div>
+		</div>
+		<div style="margin: auto;width: 1100px;text-align: center;">
+			<img src="/assets/img/cyberhome.gif" />
+			<img src="/assets/img/baicp.gif" />
+			<img src="/assets/img/blue.png" />
+		</div>
+	</div>
+</body>
+</html>
+#end
