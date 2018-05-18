@@ -1,5 +1,5 @@
 # 数据库相关配置
-jdbcUrl=jdbc:mysql://localhost/test?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+jdbcUrl=jdbc:mysql://localhost/gxkzw?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
 user=root
 password=123456
 maxPoolSize=10
@@ -11,7 +11,10 @@ acquireIncrement=1
 # 调试模式
 devMode=true
 
+# ip或域名配置
+baseUrl=http://localhost
+
 # 邮件发送账号，用于激活注册账号与找回密码  ----------------------------
-emailServer=smtp.126.com
-fromEmail=matbird@126.com
-emailPass=xiaoniao_1
+emailServer=smtp.163.com
+fromEmail=maliang5311@163.com
+emailPass=maliang531321400

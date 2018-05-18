@@ -1,0 +1,213 @@
+#@layout()
+#define main()
+<div class="kz-body-box">
+	<div class="kz-reg-panel">
+		<form id="reg-form" class="flex-box" action="/reg/save" method="post">
+			<span>注&nbsp;&nbsp;册</span>
+			<div>
+				<div class="flex-box kz-form-item">
+					<span>*</span>邮&nbsp;&nbsp;&nbsp;箱:&nbsp;&nbsp;
+					<input type="text" class="kz-input-normal" name="userName" />
+				</div>
+				<span id="userNameMsg"></span>
+			</div>
+			<div>
+				<div class="flex-box kz-form-item">
+					<span>*</span>身份证:&nbsp;&nbsp;
+					<input type="text" class="kz-input-normal" name="idNumber" />
+				</div>
+				<span id="idNumberMsg"></span>
+			</div>
+			<div>
+				<div class="flex-box kz-form-item">
+					<span>*</span>姓&nbsp;&nbsp;&nbsp;名:&nbsp;&nbsp;
+					<input type="text" class="kz-input-normal" name="realName" />
+				</div>
+				<span id="realNameMsg"></span>
+			</div>
+			<div>
+				<div class="flex-box kz-form-item">
+					<span>*</span>密&nbsp;&nbsp;&nbsp;码:&nbsp;&nbsp;
+					<input type="password" class="kz-input-normal" name="password" />
+				</div>
+				<span id="passwordMsg"></span>
+			</div>
+			<div>
+				<div class="flex-box kz-form-item">
+					<img id="captcha" src="/reg/captcha" title="点击刷新" onclick="updateCaptcha();" />
+					<input id="captchaInput" type="text" class="kz-input-normal" name="captcha" />
+				</div>
+				<span id="captchaMsg"></span>
+			</div>
+			<div>
+				<input id="submit_btn" type="submit" name="" value="注册账号">
+			</div>
+			<div class="flex-box kz-form-item">
+				已有账号&nbsp;<a href="/login">直接登录</a>,&nbsp;<a href="/reg/notActivated">还没激活?</a>
+			</div>
+		</form>
+	</div>
+	<div class="kz-reg-ok-box">
+		<div class="flex-box kz-reg-ok-panel">
+			<h2 >注册成功</h2>
+			<div id="reg-ok-msg">
+				请去往注册邮箱&nbsp;
+				<span style="color:red;" id="regEmail"></span>&nbsp;
+				查收激活邮件激活账号
+			</div>
+		</div>
+	</div>
+</div>
+#end
+
+#define css()
+
+<style type="text/css">
+	.kz-body-box {
+		width: 1100px;
+		margin: auto;
+	}
+	.kz-reg-panel {
+
+	}
+	#reg-form {
+		flex-direction: column;
+		align-items: center;
+		width: 600px;
+		border-radius: 5px;
+		height: 500px;
+		margin: 0 auto 10px auto;
+		box-shadow: 0 0 1px 1px #ededed;
+	}
+	#reg-form > span {
+		color: #042a68;
+		font-size: 22px;
+		margin-top: 20px;
+	}
+	.kz-form-item {
+		flex-direction: row;
+		margin-top: 17px;
+	}
+	.kz-form-item > span {
+		color: red;
+	}
+	.kz-input-normal {
+		border: 1px solid #ccc; 
+        padding: 7px 0px;
+        border-radius: 3px; /*css3属性IE不支持*/
+        padding-left:5px; 
+	}
+	#captcha {
+		width: 63px;
+		height: 30px;
+		margin-right: 4px;
+	}
+	#submit_btn {
+		margin-top: 20px;
+		width: 220px;
+		height: 35px;
+		background: #042a68;
+		color: #ffffff;
+		font-size: 16px;
+		border-width: 0;
+		border-radius: 5px;
+	}
+	#userNameMsg,#idNumberMsg,#passwordMsg,#captchaMsg,#realNameMsg {
+		font-size: 12px;
+		margin-top: 5px;
+		color: red;
+	}
+
+	.kz-reg-ok-box {
+		display: none;
+	}
+	.kz-reg-ok-panel {
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 600px;
+		border-radius: 5px;
+		height: 500px;
+		margin: 0 auto 10px auto;
+		box-shadow: 0 0 1px 1px #ededed;
+	}
+	.kz-reg-ok-panel h2 {
+		font-size: 20px;
+		color: #042a68;
+		margin-bottom: 16px;
+	}
+</style>
+#end
+
+#define js()
+	<script type="text/javascript" src="/assets/jquery_form/jquery.form.min.js"></script>
+	<script type="text/javascript" src="/assets/layer/layer/layer.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#reg-form").ajaxForm({
+				dataType:"json",
+				beforeSubmit:function(formData,jqForm,options){
+					// 清空所有校验msg
+					$("#reg-form >div >span").text("");
+				},
+				success:function(ret){
+					if(ret.isOk){
+						$("#submit_btn").attr("disabled",true);
+						$(".kz-reg-panel").hide();
+						$("#regEmail").text(ret.regEmail);
+						$(".kz-reg-ok-box").show();
+						return ;
+					}
+					if(ret.isFail){
+						showErrorTip(ret.msg,function(){
+							updateCaptcha();
+						});
+						return ;
+					}
+
+					if(ret.userNameMsg){
+						$("#userNameMsg").text(ret.userNameMsg);
+					}
+					if(ret.idNumberMsg){
+						$("#idNumberMsg").text(ret.idNumberMsg);
+					}
+					if(ret.realNameMsg){
+						$("#realNameMsg").text(ret.realNameMsg);
+					}
+					if(ret.passwordMsg){
+						$("#passwordMsg").text(ret.passwordMsg);
+					}
+					if(ret.captchaMsg){
+						updateCaptcha();
+						$("#captchaMsg").text(ret.captchaMsg);
+					}
+				},
+				// ret.status != 200
+				error:function(ret){
+
+				},
+				complete:function(ret){
+
+				}
+			});
+		});	
+
+		function showErrorTip(message,callback){
+			layer.msg(message,{
+				shift:6,
+				shade:0.3,
+				time:2500,
+				offset:"165px",
+				closeBtn:1,
+				shadeClose:true
+			},
+			callback);
+		}
+
+		function updateCaptcha(){
+			$("#captcha").attr("src","/reg/captcha?v="+Math.random());
+			$("#captchaInput").val("");
+		}
+	</script>
+#end

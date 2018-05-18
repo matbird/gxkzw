@@ -1,0 +1,400 @@
+#@layout()
+#define main()
+	<div>
+		<h3 class="title">#(certi.name)报名入口</h3>
+		<div style="background:#87CEFA;height: 100px;width: 800px;margin: auto;text-align: center;">
+			注意事项:...
+		</div>
+
+		<form id="enroll-form" action="/certi/confirm" class="flex-box" method="post" onsubmit="return check(this);">
+			<div class="flex-box kz-input-item-box1">
+				<div class="flex-box box1-item">
+					<span>姓名:&nbsp;&nbsp;</span>
+					<input id="name" type="text" class="kz-input-normal" name="name" value="#(loginAccount.realName)">
+				</div>
+				<div class="flex-box box1-item">
+					<span>性别:&nbsp;&nbsp;</span>
+					<input id="gender" type="text" class="kz-input-normal" name="gender" placeholder="男/女">
+				</div>
+			</div>
+			<div class="flex-box kz-input-item-box1">
+				<div class="flex-box box1-item">
+					<span>年龄:&nbsp;&nbsp;</span>
+					<input id="age" type="text" class="kz-input-normal" name="age">
+				</div>
+				<div class="flex-box box1-item">
+					<span>身份证号:&nbsp;&nbsp;</span>
+					<input id="idNumber" type="text" class="kz-input-normal" name="idNumber" value="#(loginAccount.idNumber)">
+				</div>
+			</div>
+			<div class="flex-box kz-input-item-box1">
+				<div class="flex-box box1-item">
+					<span>手机号:&nbsp;&nbsp;</span>
+					<input id="phone" type="text" class="kz-input-normal" name="phone">
+				</div>
+				<div class="flex-box box1-item">
+					<span>联系QQ:&nbsp;&nbsp;</span>
+					<input id="qq" type="text" class="kz-input-normal" name="qq">
+				</div>
+			</div>
+			<div class="flex-box kz-input-item-box2">
+				<span>联系地址:&nbsp;&nbsp;</span>
+				<input id="addr" type="text" class="kz-input-normal" name="addr">
+			</div>
+			<div class="flex-box kz-input-item-box3">
+				#if(certi.levelList)
+					<div class="flex-box box3-item">
+						<span>报考等级:&nbsp;&nbsp;</span>
+						<select name="kzLevel">
+							#for(l : certi.levelList)
+						   		<option value="#(l)">#(l)</option>
+						    #end
+						</select> 
+					</div>
+				#end
+				#if(certi.courseList)
+					<div class="flex-box box3-item">
+						<span>报考科目:&nbsp;&nbsp;</span>
+						<select name="kzCourse">
+						   #for(s : certi.courseList)
+						   		<option value="#(s)">#(s)</option>
+						    #end
+						</select> 
+					</div>
+				#end
+			</div>
+			<div class="flex-box kz-input-item-box4">
+				<div class="flex-box box4-checked">
+					<span>报考项目:&nbsp;&nbsp;</span>
+					<input id="kzProject-train" type="checkbox" name="kzProject-train" value="培训" checked="checked" />培训
+					<input id="kzProject-exam" type="checkbox" name="kzProject-exam" value="考试" />考试
+				</div>
+				#if(kzTypeList)
+					<div id="kz-type-panel" class="flex-box box4-radio">
+						<span>报考类型:&nbsp;&nbsp;</span>
+						#for(kz : kzTypeList)
+							#if(kz.kzType == 1)
+								<input name="kzType" type="radio" value="1" checked="checked"/>笔试
+							#elseif(kz.kzType == 2)
+								<input name="kzType" type="radio" value="2" />面试
+							#end
+						#end
+					</div>
+				#end
+			</div>
+			#if(trainTypeList)
+				<div id="train-type-panel" class="flex-box box5-radio">
+					<span>培训班别:&nbsp;&nbsp;</span>
+					#for(t : trainTypeList)
+						#if(t.trainType == 1)
+							<input name="trainType" type="radio" value="1" checked="checked"/>全程班
+						#elseif(t.trainType == 2)
+							<input name="trainType" type="radio" value="2" />冲刺班
+						#elseif(t.trainType == 3)
+							<input name="trainType" type="radio" value="3" />定制班
+						#end
+					#end
+				</div>
+			#end
+			<div id="total-fee-panel">总费用:<span id="fee-detail"></span>=<span id="total-fee"></span></div>
+			<div id="descri-panel"><span id="descri"></span></div>
+			<input id="certiId" type="hidden" name="id" value="#(certi.id)">
+			<input id="ckExam" type="hidden" name="ckExam" value="">
+			<input id="submit_btn" type="submit" value="提交" name="">
+		</form>
+	</div>
+#end
+
+#define css()
+	<style type="text/css">
+		.title {
+			margin: 8px auto;
+			text-align: center;
+		}
+		.kz-input-normal {
+			border: 1px solid #ccc; 
+	        padding: 7px 0px;
+	        border-radius: 3px; /*css3属性IE不支持*/
+	        padding-left:5px; 
+		}
+		#enroll-form {
+			flex-direction: column;
+			margin: 10px auto;
+			padding-top: 20px;
+			width: 800px;
+			height: 400px;
+			box-shadow: 0 0 1px 1px #ededed;
+		}
+		.kz-input-item-box1 {
+			flex-direction: row;
+			justify-content: center;
+			margin: 5px 0;
+		}
+		.box1-item {
+			flex-direction: row;
+			align-items: center;
+			width: 300px;
+			height: 35px;
+		}
+		.box1-item > span {
+			font-size: 16px;
+			font-weight: bold;
+			width: 150px;
+			text-align: right;
+		}
+		.box1-item > input {
+
+		}
+		.kz-input-item-box2 {
+			flex-direction: row;
+			align-items: center;
+			margin: 5px 10px 5px 148px;
+		}
+		.kz-input-item-box2 > span {
+			font-size: 16px;
+			font-weight: bold;
+		}
+		.kz-input-item-box2 > input {
+			width: 468px;
+		}
+		.kz-input-item-box3 {
+			flex-direction: row;
+			justify-content: center;
+			margin: 5px 0;
+		}
+		.box3-item {
+			flex-direction: row;
+			align-items: center;
+			width: 300px;
+			height: 35px;
+		}
+		.box3-item > span {
+			font-size: 16px;
+			font-weight: bold;
+			width: 126px;
+			text-align: right;
+		}
+		.box3-item > select {
+			border: 1px solid #ccc; 
+	        padding: 7px 0px;
+	        border-radius: 3px; /*css3属性IE不支持*/
+	        padding-left:5px; 
+		}
+		.kz-input-item-box4 {
+			flex-direction: row;
+			justify-content: center;
+			margin: 5px 0;
+		}
+		.box4-radio {
+			flex-direction: row;
+			align-items: center;
+			width: 300px;
+			height: 35px;
+		}
+		.box4-radio > span {
+			font-size: 16px;
+			font-weight: bold;
+			width: 126px;
+			text-align: right;
+		}
+		.box4-radio > input {
+			margin: 0 8px;
+		}
+		.box4-checked {
+			flex-direction: row;
+			align-items: center;
+			width: 300px;
+			height: 35px;
+		}
+		.box4-checked > span {
+			font-size: 16px;
+			font-weight: bold;
+			width: 126px;
+			text-align: right;
+		}
+		.box4-checked > input {
+			margin: 0 8px;
+		}
+		#submit_btn {
+			width: 220px;
+			height: 35px;
+			margin: auto;
+			background: #042a68;
+			color: #ffffff;
+			font-size: 16px;
+			border-width: 0;
+			border-radius: 5px;
+		}
+		.box5-radio {
+			flex-direction: row;
+			align-items: center;
+			margin: 5px 10px 5px 100px;
+		}
+		.box5-radio > span {
+			font-size: 16px;
+			font-weight: bold;
+			width: 126px;
+			text-align: right;
+		}
+		#total-fee-panel {
+			margin: 5px 10px 5px 148px;
+			font-size: 18px;
+			color: red;
+		}
+		#descri-panel {
+			margin: 5px 10px 5px 148px;
+			font-size: 16px;
+			color: red;
+		}
+	</style>
+#end
+
+#define js()
+	<script type="text/javascript" src="/assets/jquery_form/jquery.form.min.js"></script>
+	<script type="text/javascript" src="/assets/layer/layer/layer.js"></script>
+
+	<script type="text/javascript">
+		/*$(document).ready(function(){
+			$("#enroll-form").ajaxForm({
+				data:{
+					name:$("#name").val()
+				},
+				dataType:"json",
+				beforeSubmit:function(formData,jqForm,options){
+
+				},
+				success:function(ret){
+					if(ret.isOk){
+						location.href = "/certi/confirmEnroll"
+						return ;
+					}
+				}
+			});
+		});*/
+
+		$(document).ready(function(){
+			// 设置培训类型的第一个培训班别为选中状态
+			 $("input[name='trainType']:radio:first").attr("checked", "checked");
+			calcFee();
+			$("#kzProject-exam").change(function(){
+				calcFee();
+			});
+			$("#kzProject-train").change(function(){
+				calcFee();
+			});
+			$("input[name='trainType']").each(function(){
+				$(this).click(function(){
+					calcFee();
+				});
+			});
+			$("input[name='kzType']").each(function(){
+				$(this).click(function(){
+					calcFee();
+				});
+			});
+		});
+
+		function calcFee(){
+			var ckExamPara = $("#kzProject-exam").is(':checked') ? 1 : 0;
+			$("#ckExam").val(ckExamPara);
+			var kzTypePara ;
+			if($("#kz-type-panel").length > 0){
+				kzTypePara = $("input[name='kzType']:checked").val();
+			}else{
+				kzTypePara = 0;
+			}
+			var trainTypePara;
+			if($("#train-type-panel").length>0){
+				trainTypePara = $("input[name='trainType']:checked").val();
+			}else{
+				trainTypePara = 0;
+			}
+			$.ajax("/certi/calcFee",{
+				dataType:"json",
+				type:"POST",
+				cache:false,
+				data:{
+					id:$("#certiId").val(),
+					ckExam:ckExamPara,
+					trainTye:trainTypePara,
+					kzType:kzTypePara
+				},
+				beforeSend:function(){
+					$("#descri").text("");
+				},
+				success:function(ret){
+					if(ret.isOk){
+						$("#fee-detail").text(ret.fee_tip);
+						$("#total-fee").text(ret.fee);
+						$("#descri").text(ret.descri);
+						return ;
+					}
+					if(ret.isFail){
+						$("#descri").text(ret.descri);
+						return ;
+					}
+				}
+			});
+		}
+
+		function check(form){
+			if($("#name").val() === ''){
+				showErrorTip("请输入姓名",null);
+				$("#name").focus();
+				return false;
+			}
+			if($("#gender").val() === ''){
+				showErrorTip("请输入性别",null);
+				$("#gender").focus();
+				return false;
+			}
+			if(!($("#gender").val() === '男' || $("#gender").val() === '女')){
+				showErrorTip("性别只能为男或女",null);
+				$("#gender").focus();
+				return false;
+			}
+			if($("#age").val() === ''){
+				showErrorTip("请输入年龄",null);
+				$("#age").focus();
+				return false;
+			}
+			if($("#idNumber").val() === ''){
+				showErrorTip("请输入身份证号",null);
+				$("#idNumber").focus();
+				return false;
+			}
+			if($("#phone").val() === ''){
+				showErrorTip("请输入手机号",null);
+				$("#phone").focus();
+				return false;
+			}
+			if($("#qq").val() === ''){
+				showErrorTip("请输入联系QQ",null);
+				$("#qq").focus();
+				return false;
+			}
+			if($("#addr").val() === ''){
+				showErrorTip("请输入联系地址",null);
+				$("#addr").focus();
+				return false;
+			}
+			if(!$("#kzProject-train").is(':checked')){
+				showErrorTip("培训项目必须要选择哦",null);
+				$("#kzProject-train").focus();
+				return false;
+			}
+		}
+
+		function showErrorTip(message,callback){
+			layer.msg(message,{
+				shift:6,
+				shade:0.3,
+				time:2500,
+				offset:"165px",
+				closeBtn:1,
+				shadeClose:true
+			},
+			callback);
+		}
+	</script>
+#end

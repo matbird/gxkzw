@@ -1,0 +1,211 @@
+#@layout()
+#define main()
+	<div class="kz-body-box">
+		<div class="flex-box black-border kz-confirm-panel">
+			<h3 class="black-border">[#(certi.name)]报考确认信息</h3>
+			<div class="flex-box confirm-box1">
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">姓名</span>
+					<span id="name" class="black-border t-value">#(name)</span>
+				</div>
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">性别</span>
+					<span id="gender" class="black-border t-value">#(gender)</span>
+				</div>
+			</div>
+			<div class="flex-box confirm-box1">
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">年龄</span>
+					<span id="age" class="black-border t-value">#(age)</span>
+				</div>
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">身份证号</span>
+					<span id="idNumber" class="black-border t-value">#(idNumber)</span>
+				</div>
+			</div>
+			<div class="flex-box confirm-box1">
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">联系电话</span>
+					<span id="phone" class="black-border t-value">#(phone)</span>
+				</div>
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">联系QQ</span>
+					<span id="qq" class="black-border t-value">#(qq)</span>
+				</div>
+			</div>
+			<div class="flex-box confirm-box2">
+				<span class="black-border t-name">联系地址</span>
+				<span id="addr" class="black-border t-value">#(addr)</span>
+			</div>
+			<div class="flex-box confirm-box1">
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">报考等级</span>
+					<span id="kzLevel" class="black-border t-value">#(kzLevel)</span>
+				</div>
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">报考科目</span>
+					<span id="kzCourse" class="black-border t-value">#(kzCourse)</span>
+				</div>
+			</div>
+			<div class="flex-box confirm-box1">
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">报考类型</span>
+					<span id="kzType" class="black-border t-value">#(kzType)</span>
+				</div>
+				<div class="flex-box box1-item">
+					<span class="black-border t-name">报考项目</span>
+					<span id="kzProject" class="black-border t-value">#(kzProject)</span>
+				</div>
+			</div>
+		</div>
+		<input id="certiId" type="hidden" name="certiId" value="#(certi.id)">
+		<input id="trainType" type="hidden" name="trainType" value="#(trainType)">
+		<input id="ckExam" type="hidden" name="ckExam" value="#(ckExam)">
+		<div id="pay-info">
+			
+		</div>
+		<div id="confirm-button-panel">
+			<input id="back-modi-btn" type="button" value="返回修改" name="" onclick="javascript:history.back(-1);">
+			<input id="submit_btn" type="button" value="提交支付" name="">
+		</div>
+	</div>
+#end
+
+#define css()
+	<style type="text/css">
+		.kz-body-box {
+			width: 1100px;
+		}
+		.kz-confirm-panel {
+			flex-direction: column;
+			width: 600px;
+			height: 250px;
+			margin: 20px auto;
+		}
+		.black-border {
+			border-width: 1px;
+			border-color: #042a68;
+			border-style: solid;
+		}
+		.kz-confirm-panel > h3 {
+			height: 40px;
+			padding-top: 5px;
+			text-align: center;
+		}
+		.confirm-box1 {
+			height: 35px;
+			flex-direction: row;
+		}
+		.box1-item {
+			width: 300px;
+			flex-direction: row;
+		}
+		.box1-item > .t-name {
+			padding-top: 5px;
+			text-align: center;
+			font-size: 16px;
+			font-weight: bold;
+			width: 100px;
+		}
+		.box1-item > .t-value {
+			padding-top: 5px;
+			text-align: center;
+			font-size: 14px;
+			width: 200px;
+		}
+		.confirm-box2 {
+			height: 35px;
+			flex-direction: row;
+		}
+		.confirm-box2 > .t-name {
+			padding-top: 5px;
+			text-align: center;
+			font-size: 16px;
+			font-weight: bold;
+			width: 200px;
+		}
+		.confirm-box2 > .t-value {
+			padding-top: 5px;
+			text-align: center;
+			font-size: 14px;
+			width: 400px;
+		}
+		#confirm-button-panel {
+			margin: auto;
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		#confirm-button-panel > input {
+			width: 220px;
+			height: 35px;
+			background: #042a68;
+			color: #ffffff;
+			font-size: 16px;
+			border-width: 0;
+			border-radius: 5px;
+		}
+	</style>
+#end
+
+#define js()
+	<script type="text/javascript" src="/assets/jquery_form/jquery.form.min.js"></script>
+	<script type="text/javascript" src="/assets/layer/layer/layer.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#submit_btn").bind("click",function(){
+				var load_index;
+				$.ajax("/order/submit",{
+					type:"POST",
+					dataType:"json",
+					cache:false,
+					data:{
+						name:$("#name").text(),
+						gender:$("#gender").text(),
+						age:$("#age").text(),
+						idNumber:$("#idNumber").text(),
+						phone:$("#phone").text(),
+						qq:$("#qq").text(),
+						addr:$("#addr").text(),
+						kzLevel:$("#kzLevel").text(),
+						kzCourse:$("#kzCourse").text(),
+						kzType:$("#kzType").text(),
+						kzProject:$("#kzProject").text(),
+						certiId:$("#certiId").val(),
+						trainType:$("#trainType").val(),
+						ckExam:$("#ckExam").val()
+					},
+					beforeSend:function(){
+						load_index = layer.load(2)
+						$("#submit_btn").attr("disabled",true);
+					},
+					success:function(ret){
+						layer.msg(ret.msg,{
+							shift:ret.isOk ? 0 : 6,
+							shade:0.3,
+							time:0,
+							offset:"130px",
+							closeBtn:1,
+							shadeClose:false,
+							maxWidth:"1000"
+						},function(){
+							if(ret.isFail){
+								$("#submit_btn").attr("disabled",false);
+							}
+						});
+
+						if(ret.isOk){
+							window.location.href = "/order/pay/?orderId="+ret.orderId;
+						}
+					},
+					error:function(ret){
+
+					},
+					complete:function(ret){
+						layer.close(load_index);
+					}
+				});
+			});
+		});	
+	</script>
+#end

@@ -1,0 +1,183 @@
+#@layout()
+#define main()
+	<div class="flex-box">
+
+		<div class="kz-left-box">
+			放一张大图片或其他展示信息
+		</div>
+
+		<div class="flex-box kz-right-box">
+			<span >登&nbsp;&nbsp;录</span>
+			<form id="login-panel" action="/login/doLogin?returnUrl=#(returnUrl)" method="post">
+				<div class="flex-box kz-input-item" >
+					<input type="text" name="userName" class="kz-input-normal" placeholder="邮箱/身份证" />
+					<span id="userNameMsg"></span>
+				</div>
+				<div class="flex-box kz-input-item" >
+					<input type="password" name="password" class="kz-input-normal" placeholder="密码" />
+					<span id="passwordMsg"></span>
+				</div>
+				<div class="flex-box kz-input-item">
+					<div class="flex-box kz-captcha-input">
+						<input id="captchaInput" type="text" name="captcha" class="kz-input-normal" placeholder="验证码" />
+						<img src="/login/captcha" id="captcha" title="点击刷新" onclick="updateCaptcha();" />
+					</div>
+					<span id="captchaMsg"></span>
+				</div>
+				<div style="margin-top: 15px;">
+					<input type="checkbox" id="keepLogin" name="keepLogin" value='1' checked='checked'/>&nbsp;
+					<label for="keepLogin" style="cursor:pointer;font-size: 14px;">保持登录<span style="color:#A00;font-size: 12px;">(请勿在公用电脑选择)</span></label>
+				</div>
+				<div>
+					<input id="submit_btn" type="submit" value="登录"/>
+				</div>
+			</form>
+
+			<div class="kz-login-more">
+				<a href="/login/forgetPassword">找回密码&nbsp;&nbsp;</a>
+				<a href="/reg/notActivated">&nbsp;&nbsp;还未激活&nbsp;&nbsp;</a>
+				<a href="/reg">&nbsp;&nbsp;注册</a>
+			</div>
+		</div>
+	</div>
+#end
+
+#define css()
+	<style type="text/css">
+		.kz-body-box {
+			flex-direction: row;
+			width: 1100px;
+			margin: 0 auto 10px auto;
+		}
+		.kz-left-box {
+			width: 750px;
+			border-radius: 5px;
+			height: 500px;
+			margin: auto;
+			box-shadow: 0 0 1px 1px #ededed;
+			text-align: center;
+		}
+		.kz-right-box {
+			flex-direction: column;
+			align-items: center;
+			width: 300px;
+			border-radius: 5px;
+			height: 500px;
+			margin: auto;
+			box-shadow: 0 0 1px 1px #ededed;
+		}
+		.kz-right-box > span {
+			font-size: 22px;
+			color: #042a68;
+			margin-top: 20px;
+			margin-bottom: 10px;
+		}
+		.kz-input-item {
+			flex-direction: column;
+			margin-top: 20px;
+			width: 200px;
+		}
+		.kz-input-item > span {
+			color: red;
+			font-size: 14px;
+			margin-top: 5px;
+		}
+		.kz-input-normal {
+			border: 1px solid #ccc; 
+	        padding: 7px 0px;
+	        border-radius: 3px; /*css3属性IE不支持*/
+	        padding-left:5px; 
+		}
+		.kz-captcha-input {
+			flex-direction: row;
+		}
+		.kz-captcha-input > input {
+			width: 110px;
+			margin-right: 8px;
+		}
+		.kz-captcha-input > img {
+			width: 75px;
+			height: 33px;
+		}
+		#submit_btn {
+			margin-top: 20px;
+			color: #ffffff;
+			width: 200px;
+			border-style: none;
+			border-radius: 3px;
+			height: 35px;
+			background: #042a68;
+		}
+		.kz-login-more {
+			margin-top: 30px;
+		}
+		.kz-login-more > a {
+			color: #042a68;
+			font-size: 16px;
+			text-decoration:none;
+		}
+	</style>
+#end
+
+#define js()
+	<script type="text/javascript" src="/assets/jquery_form/jquery.form.min.js"></script>
+	<script type="text/javascript" src="/assets/layer/layer/layer.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#login-panel").ajaxForm({
+				dataType:"json",
+				beforeSubmit:function(formData,jqForm,options){
+					$(".kz-input-item > span").text("");
+				},
+				success:function(ret){
+					if(ret.isOk){
+						location.href = ret.returnUrl;
+						return ;
+					}
+					if(ret.isFail){
+						showErrorTip(ret.msg,function(){
+							updateCaptcha();
+						});
+						return ;
+					}
+
+					if(ret.userNameMsg){
+						$("#userNameMsg").text(ret.userNameMsg);
+					}
+					if(ret.passwordMsg){
+						$("#passwordMsg").text(ret.passwordMsg);
+					}
+					if(ret.captchaMsg){
+						updateCaptcha();
+						$("#captchaMsg").text(ret.captchaMsg);
+					}
+
+				},
+				error:function(ret){
+
+				},
+				complete:function(ret){
+
+				}
+			});
+		});
+
+		function showErrorTip(message,callback){
+			layer.msg(message,{
+				shift:6,
+				shade:0.3,
+				time:2500,
+				offset:"165px",
+				closeBtn:1,
+				shadeClose:true
+			},
+			callback);
+		}
+
+		function updateCaptcha(){
+			$("#captcha").attr("src","/login/captcha?v="+Math.random());
+			$("#captchaInput").val("");
+		}
+	</script>
+#end

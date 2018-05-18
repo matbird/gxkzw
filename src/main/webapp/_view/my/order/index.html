@@ -1,0 +1,70 @@
+#@layout()
+#define main()
+	<div class="flex-box kz-body-box">
+		<!-- <a href="/logout" style="color: blue;">退出登录</a> -->
+		<div class="kz-left-box">
+			<div class="flex-box kz-account-panel">
+				<img src="/upload/avatar/#(loginAccount.avatar)">
+				<span style="color: #ffffff;">#(loginAccount.realName)</span>
+				<a href="/logout" style="color: #ffffff;">退出登录</a>
+			</div>
+			<div>
+				
+			</div>
+		</div>
+		<div class="kz-right-box">
+			<ul>
+				#for(o : orderList)
+					<li>
+						<table border="1">
+							<tr>
+								<th>订单编号</th>
+								<th>报考证书名</th>
+								<th>订单费用</th>
+								<th>交费时间</th>
+								<th>考试时间</th>
+							</tr>
+							<tr>
+								<td>#(o.id)</td>
+								<td>#(o.content)</td>
+								<td>#(o.payment)</td>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+					</li>
+				#end
+			</ul>
+		</div>
+	</div>
+#end
+
+#define css()
+	<style type="text/css">
+		.kz-body-box {
+			flex-direction: row;
+			width: 1100px;
+			height: 700px;
+			margin-bottom: 20px;
+		}
+		.kz-left-box {
+			width: 300px;
+			background-color: #4169E1;
+		}
+		.kz-right-box {
+			width: 800px;
+		}
+		.kz-right-box > ul {
+			margin: auto;
+			list-style-type: none;
+		}
+		.kz-li-panel {
+			 flex-direction: row;
+		}
+		.kz-account-panel {
+			margin-top: 10px;
+			flex-direction: column;
+			align-items: center;
+		}
+	</style>
+#end
